@@ -16,4 +16,5 @@
   in cmd run: docker-compose up
 ```
 
-Go to http://localhost:3000/ to enjoy
+Go to http://localhost:3000/
+Login with account admin@example.com / admin to enjoy

@@ -1,6 +1,7 @@
 const path = require('path')
 const express = require('express')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')
 const mongoose = require('mongoose')
 const rateLimit = require('express-rate-limit')
 const helmet = require('helmet')
@@ -13,8 +14,9 @@ const cors = require('cors')
 const createError = require('http-errors')
 const logger = require('morgan')
 const dotenv = require('dotenv')
-const passport = require('passport')
+const passport = require('./config/passport')
 
+const auth = require('./routes/auth')
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
@@ -38,8 +40,7 @@ const app = express()
 /**
  * Connect to MongoDB.
  */
-mongoose.set('strictQuery', true)
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
 console.log(process.env.MONGODB_URI)
 mongoose.connection.on('error', (err) => {
   console.error(err)
@@ -71,10 +72,30 @@ app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(bodyParser.json())
+
+/**
+ * Express session
+ */
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
+  })
+)
+
+// Passport middleware
+app.use(passport.initialize())
+app.use(passport.session())
 
 /**
  * Primary app routes.
  */
+app.use('/', auth)
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 

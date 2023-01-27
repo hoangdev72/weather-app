@@ -1,27 +1,80 @@
+mixin loginForm
+  .flex
+    button.btn.btn-primary(type='button' data-bs-toggle='modal' data-bs-target='#login_form' data-bs-whatever='@login') Login
+    button.btn.btn-primary.ms-1(type='button' data-bs-toggle='modal' data-bs-target='#register_form' data-bs-whatever='@register') Register
+  #login_form.modal.fade(tabindex='-1' aria-labelledby='login_form' aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5.modal-title Login
+          button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+        .modal-body
+          form(action='/login' method='post')
+            .mb-3
+              label.col-form-label(for='email') Email
+              input#email.form-control(name='email' type='email' autocomplete='email' required='' autofocus='')
+            .mb-3
+              label.col-form-label(for='password') Password:
+              input#password.form-control(name='password' type='password' autocomplete='password' required='')
+            .modal-footer
+              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+              button.btn.btn-primary(type='submit') Login
+
+  #register_form.modal.fade(tabindex='-1' aria-labelledby='register_form' aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5#register_form.modal-title Register
+          button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+        .modal-body
+          form(action='/signup' method='post')
+            .mb-3
+              label.col-form-label(for='email') Email
+              input#email.form-control(name='email' type='email' autocomplete='email' required='' autofocus='')
+            .mb-3
+              label.col-form-label(for='password') Password:
+              input#password.form-control(name='password' type='password' autocomplete='password' required='')
+            .mb-3
+              label.col-form-label(for='message-text') Password confirm:
+              input#password_confirm.form-control(name='password_confirm' type='password' autocomplete='password_confirm' required='')
+            .modal-footer
+              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+              button.btn.btn-primary(type='submit') Register
+
 nav.navbar.navbar-dark.bg-dark
   .container-fluid
-    a.navbar-brand(href='#') Hello
+    if user
+      a.navbar-brand(href='#') Hello #{user.email}
+    else
+      +loginForm
+
     button.navbar-toggler(type='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasDarkNavbar' aria-controls='offcanvasDarkNavbar')
       span.navbar-toggler-icon
     #offcanvasDarkNavbar.offcanvas.offcanvas-end.text-bg-dark(tabindex='-1' aria-labelledby='offcanvasDarkNavbarLabel')
       .offcanvas-header
-        h5#offcanvasDarkNavbarLabel.offcanvas-title Dark offcanvas
+        h5#offcanvasDarkNavbarLabel.offcanvas-title Settings
         button.btn-close.btn-close-white(type='button' data-bs-dismiss='offcanvas' aria-label='Close')
       .offcanvas-body
         ul.navbar-nav.justify-content-end.flex-grow-1.pe-3
           li.nav-item
-            a.nav-link.active(aria-current='page' href='#') Home
-          li.nav-item
-            a.nav-link(href='#') Link
-          li.nav-item.dropdown
-            a.nav-link.dropdown-toggle(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')
-              | Dropdown
-            ul.dropdown-menu.dropdown-menu-dark
-              li
-                a.dropdown-item(href='#') Action
-              li
-                a.dropdown-item(href='#') Another action
-              li
-                hr.dropdown-divider
-              li
-                a.dropdown-item(href='#') Something else here
+            a.nav-link.active(aria-current='page' href='#') Me
+          li.nav-item.flex
+            a#logout.nav-link(href='#') Logout
+              i.fa-solid.fa-right-from-bracket.ms-1
+
+    script.
+      $(document).ready(function(){
+        $("#logout").click(function(){
+          if (confirm("Are you sure!") == true) {
+            $.ajax({
+              url: "/logout",
+              method: "POST",
+              success: function(data) {
+                window.location.href = "/";
+              }
+            });
+          } else {
+            return false;
+          }
+        });
+      });

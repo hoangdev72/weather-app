@@ -1,4 +1,34 @@
 extends layout
 
+mixin render(weather)
+  .col-md-8.col-lg-6.col-xl-4
+    .card(style='color: #4B515D; border-radius: 35px;')
+      .card-body.p-4
+        .d-flex
+          h6.flex-grow-1 Warsaw
+          h6 20:20 pm
+        .d-flex.flex-column.text-center.mt-5.mb-4
+          h6.display-4.mb-0.font-weight-bold(style='color: #1C2331;')  13&deg;C
+          span.small(style='color: #868B94') Stormy
+        .d-flex.align-items-center
+          .flex-grow-1(style='font-size: 1rem;')
+            div
+              i.fas.fa-wind.fa-fw(style='color: #868B94;')
+              span.ms-1
+                | 40 km/h
+            div
+              i.fas.fa-tint.fa-fw(style='color: #868B94;')
+              span.ms-1  84%
+            div
+              i.fas.fa-sun.fa-fw(style='color: #868B94;')
+              span.ms-1  0.2h
+          div
+            img(src='https://openweathermap.org/img/wn/09d@2x.png')
+
 block content
-  h1 Weather app | #{title}
+  section.main-section(style='background-color: #4B515D;')
+    .container.py-5.h-100
+      .row.d-flex.justify-content-center.align-items-center.h-100
+        +render(weather)
+
+
