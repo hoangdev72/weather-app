@@ -1,19 +1,19 @@
 # Installation
 
-```bash
+
   install docker: https://docs.docker.com/engine/install/
-```
 
-```bash
+
+
   install docker-compose: https://docs.docker.com/compose/install/
+
+
+```bash
+  cp .env.example  .env
 ```
 
 ```bash
-  rename .env.example to .env
-```
-
-```bash
-  in cmd run: docker-compose up
+   docker-compose up
 ```
 
 Go to http://localhost:3000/
