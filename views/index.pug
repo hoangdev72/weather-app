@@ -5,25 +5,25 @@ mixin render(weather)
     .card(style='color: #4B515D; border-radius: 35px;')
       .card-body.p-4
         .d-flex
-          h6.flex-grow-1 Warsaw
-          h6 20:20 pm
+          h6.flex-grow-1 #{weather.name}
+          h6 #{time}
         .d-flex.flex-column.text-center.mt-5.mb-4
           h6.display-4.mb-0.font-weight-bold(style='color: #1C2331;')  13&deg;C
-          span.small(style='color: #868B94') Stormy
+          span.small(style='color: #868B94') #{weather.weather[0].main}
         .d-flex.align-items-center
           .flex-grow-1(style='font-size: 1rem;')
             div
               i.fas.fa-wind.fa-fw(style='color: #868B94;')
               span.ms-1
-                | 40 km/h
+                | #{weather.wind.speed} km/h
             div
               i.fas.fa-tint.fa-fw(style='color: #868B94;')
-              span.ms-1  84%
-            div
-              i.fas.fa-sun.fa-fw(style='color: #868B94;')
-              span.ms-1  0.2h
+              span.ms-1  #{weather.main.humidity}%
+            //- div
+            //-   i.fas.fa-sun.fa-fw(style='color: #868B94;')
+            //-   span.ms-1  #{weather.clouds.all}
           div
-            img(src='https://openweathermap.org/img/wn/09d@2x.png')
+            img(src=`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`)
 
 block content
   section.main-section(style='background-color: #4B515D;')
